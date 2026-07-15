@@ -683,3 +683,8 @@ footer{
     }
 
 }
+
+.nav-links a.active{
+    color:#2563eb;
+    font-weight:700;
+}
