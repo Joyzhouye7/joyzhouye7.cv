@@ -1,30 +1,40 @@
 /* ==========================================================
-   Joy Zhou Ye Portfolio Website
+   Joy Zhou Ye Portfolio
    script.js
 ========================================================== */
 
-/* ---------- Smooth active navigation ---------- */
+
+/* ==========================================
+   ACTIVE NAVIGATION
+========================================== */
 
 const sections = document.querySelectorAll("section");
 const navLinks = document.querySelectorAll(".nav-links a");
 
 window.addEventListener("scroll", () => {
+
     let current = "";
 
     sections.forEach(section => {
-        const sectionTop = section.offsetTop - 120;
 
-        if (window.scrollY >= sectionTop) {
+        const sectionTop = section.offsetTop - 180;
+
+        if(window.scrollY >= sectionTop){
+
             current = section.getAttribute("id");
+
         }
+
     });
 
-    navLinks.forEach(link => {
+    navLinks.forEach(link=>{
 
         link.classList.remove("active");
 
-        if (link.getAttribute("href") === "#" + current) {
+        if(link.getAttribute("href")==="#" + current){
+
             link.classList.add("active");
+
         }
 
     });
@@ -32,13 +42,16 @@ window.addEventListener("scroll", () => {
 });
 
 
-/* ---------- Fade In Animation ---------- */
 
-const observer = new IntersectionObserver((entries) => {
+/* ==========================================
+   FADE UP ANIMATION
+========================================== */
 
-    entries.forEach(entry => {
+const observer = new IntersectionObserver((entries)=>{
 
-        if (entry.isIntersecting) {
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
 
             entry.target.classList.add("show");
 
@@ -46,156 +59,324 @@ const observer = new IntersectionObserver((entries) => {
 
     });
 
-}, {
-    threshold: 0.15
+},{
+    threshold:.18
 });
 
 
-const animatedElements = document.querySelectorAll(
-    ".experience-card, .education-card, .stat-card, .skill-tag, .about-text"
-);
+document.querySelectorAll(
+`
+.timeline-item,
+.stat-card,
+.education-card,
+.skill-group,
+.about-left,
+.about-right,
+.contact,
+.section-header
+`
+).forEach(el=>{
 
-animatedElements.forEach(element => {
+    el.classList.add("fade-up");
 
-    element.classList.add("fade-up");
-
-    observer.observe(element);
-
-});
-
-
-/* ---------- Counter Animation ---------- */
-
-const counters = document.querySelectorAll(".counter");
-
-const counterObserver = new IntersectionObserver((entries) => {
-
-    entries.forEach(entry => {
-
-        if (!entry.isIntersecting) return;
-
-        const counter = entry.target;
-
-        const target = Number(counter.dataset.target);
-
-        let current = 0;
-
-        const increment = Math.ceil(target / 50);
-
-        const updateCounter = () => {
-
-            current += increment;
-
-            if (current >= target) {
-
-                counter.innerText = target + "+";
-
-            } else {
-
-                counter.innerText = current;
-
-                requestAnimationFrame(updateCounter);
-
-            }
-
-        };
-
-        updateCounter();
-
-        counterObserver.unobserve(counter);
-
-    });
-
-}, {
-    threshold: 0.5
-});
-
-
-counters.forEach(counter => {
-
-    counterObserver.observe(counter);
+    observer.observe(el);
 
 });
 
 
-/* ---------- Navbar Shadow ---------- */
 
-const navbar = document.querySelector(".navbar");
+/* ==========================================
+   COUNTERS
+========================================== */
 
-window.addEventListener("scroll", () => {
+const counters=document.querySelectorAll(".counter");
 
-    if (window.scrollY > 50) {
+const counterObserver=new IntersectionObserver((entries)=>{
 
-        navbar.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+entries.forEach(entry=>{
 
-        navbar.style.background = "rgba(255,255,255,0.98)";
+if(!entry.isIntersecting)return;
 
-    } else {
+const counter=entry.target;
 
-        navbar.style.boxShadow = "none";
+const target=+counter.dataset.target;
 
-        navbar.style.background = "rgba(255,255,255,0.95)";
+let current=0;
 
-    }
+const increment=Math.ceil(target/60);
 
-});
+function update(){
 
+current+=increment;
 
-/* ---------- Typing Effect ---------- */
+if(current>=target){
 
-const subtitle = document.querySelector(".hero h2");
+counter.innerHTML=target+"+";
 
-const text = "Bridging Manufacturing, Global Trade, and Sustainability";
+}else{
 
-subtitle.innerHTML = "";
+counter.innerHTML=current;
 
-let index = 0;
-
-function typeWriter() {
-
-    if (index < text.length) {
-
-        subtitle.innerHTML += text.charAt(index);
-
-        index++;
-
-        setTimeout(typeWriter, 40);
-
-    }
+requestAnimationFrame(update);
 
 }
 
-window.addEventListener("load", () => {
+}
 
-    setTimeout(typeWriter, 400);
+update();
+
+counterObserver.unobserve(counter);
+
+});
+
+},{
+threshold:.5
+});
+
+counters.forEach(counter=>{
+
+counterObserver.observe(counter);
 
 });
 
 
-/* ---------- Reveal Hero ---------- */
 
-window.addEventListener("load", () => {
+/* ==========================================
+   HERO TYPING
+========================================== */
 
-    document.querySelector(".hero-content").style.opacity = "0";
-    document.querySelector(".hero-content").style.transform = "translateY(30px)";
+const heroTitle=document.querySelector(".hero h2");
 
-    setTimeout(() => {
+const originalText=heroTitle.textContent;
 
-        document.querySelector(".hero-content").style.transition =
-            "all 1s ease";
+heroTitle.textContent="";
 
-        document.querySelector(".hero-content").style.opacity = "1";
+let index=0;
 
-        document.querySelector(".hero-content").style.transform =
-            "translateY(0px)";
+function typing(){
 
-    }, 100);
+if(index<originalText.length){
+
+heroTitle.textContent+=originalText.charAt(index);
+
+index++;
+
+setTimeout(typing,40);
+
+}
+
+}
+
+window.addEventListener("load",()=>{
+
+setTimeout(typing,500);
 
 });
 
 
-/* ---------- Current Year ---------- */
 
-const footer = document.querySelector("footer p");
+/* ==========================================
+   NAVBAR EFFECT
+========================================== */
 
-footer.innerHTML = `© ${new Date().getFullYear()} Joy Zhou Ye. All Rights Reserved.`;
+const navbar=document.querySelector(".navbar");
+
+window.addEventListener("scroll",()=>{
+
+if(window.scrollY>80){
+
+navbar.style.background="rgba(0,0,0,.97)";
+
+navbar.style.borderBottom="1px solid rgba(255,209,0,.25)";
+
+navbar.style.boxShadow="0 10px 30px rgba(0,0,0,.45)";
+
+}else{
+
+navbar.style.background="rgba(0,0,0,.93)";
+
+navbar.style.borderBottom="1px solid #2A2A2A";
+
+navbar.style.boxShadow="none";
+
+}
+
+});
+
+
+
+/* ==========================================
+   SMOOTH BUTTON SCROLL
+========================================== */
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+
+anchor.addEventListener("click",function(e){
+
+e.preventDefault();
+
+const target=document.querySelector(this.getAttribute("href"));
+
+if(target){
+
+window.scrollTo({
+
+top:target.offsetTop-80,
+
+behavior:"smooth"
+
+});
+
+}
+
+});
+
+});
+
+
+
+/* ==========================================
+   SCROLL PROGRESS BAR
+========================================== */
+
+const progress=document.createElement("div");
+
+progress.style.position="fixed";
+
+progress.style.top="0";
+
+progress.style.left="0";
+
+progress.style.height="4px";
+
+progress.style.width="0";
+
+progress.style.background="#FFD100";
+
+progress.style.zIndex="99999";
+
+document.body.appendChild(progress);
+
+window.addEventListener("scroll",()=>{
+
+const scrollTop=document.documentElement.scrollTop;
+
+const height=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+
+const percent=(scrollTop/height)*100;
+
+progress.style.width=percent+"%";
+
+});
+
+
+
+/* ==========================================
+   PARALLAX HERO
+========================================== */
+
+const hero=document.querySelector(".hero");
+
+window.addEventListener("scroll",()=>{
+
+const offset=window.pageYOffset;
+
+hero.style.backgroundPositionY=offset*0.35+"px";
+
+});
+
+
+
+/* ==========================================
+   GLOW FOLLOW MOUSE
+========================================== */
+
+const glow=document.createElement("div");
+
+glow.style.position="fixed";
+
+glow.style.width="350px";
+
+glow.style.height="350px";
+
+glow.style.borderRadius="50%";
+
+glow.style.pointerEvents="none";
+
+glow.style.background="radial-gradient(circle, rgba(255,209,0,.08), transparent 70%)";
+
+glow.style.transform="translate(-50%,-50%)";
+
+glow.style.zIndex="0";
+
+document.body.appendChild(glow);
+
+document.addEventListener("mousemove",(e)=>{
+
+glow.style.left=e.clientX+"px";
+
+glow.style.top=e.clientY+"px";
+
+});
+
+
+
+/* ==========================================
+   CARD HOVER LIFT
+========================================== */
+
+document.querySelectorAll(
+
+".timeline-content,.education-card,.stat-card,.skill-group"
+
+).forEach(card=>{
+
+card.addEventListener("mouseenter",()=>{
+
+card.style.transform="translateY(-10px)";
+
+});
+
+card.addEventListener("mouseleave",()=>{
+
+card.style.transform="translateY(0px)";
+
+});
+
+});
+
+
+
+/* ==========================================
+   FOOTER YEAR
+========================================== */
+
+const footer=document.querySelector("footer p");
+
+footer.innerHTML=`© ${new Date().getFullYear()} Joy Zhou Ye | Industrial & Technical Commercial Professional`;
+
+
+
+/* ==========================================
+   HERO FADE
+========================================== */
+
+window.addEventListener("load",()=>{
+
+const heroContent=document.querySelector(".hero-content");
+
+heroContent.style.opacity="0";
+
+heroContent.style.transform="translateY(40px)";
+
+setTimeout(()=>{
+
+heroContent.style.transition="all 1.2s ease";
+
+heroContent.style.opacity="1";
+
+heroContent.style.transform="translateY(0)";
+
+},100);
+
+});
